@@ -1,7 +1,7 @@
 #include <SPI.h>
 #include <RF24.h>
 #include <nRF24L01.h>
-#incldue <Servo.h>
+#include <Servo.h>
 
 const int csn_pin = 9;
 const int ce_pin = 10;
@@ -49,6 +49,6 @@ void transmitVoltage(){
   
 }
 
-void updateMainMotorParams(
-  mainMotor.write(dataArray[0], 0, 1023, 0, 180);
+void updateMainMotorParams(){
+  mainMotor.write(map(dataArray[0], 0, 1023, 0, 180));
 }
