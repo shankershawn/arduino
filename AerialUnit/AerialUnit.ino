@@ -15,13 +15,20 @@ RF24 radio(ce_pin,csn_pin);
 Servo mainMotor;
 const byte address[][6] = {"frdv4","ed32w"};
 int dataArray[3];
+bool changeFlag = false;
+int motorRunStatus = -1;
 
 void setup() {
   Serial.begin(9600);
   radioSetup();
-  mainMotor.attach(8,1000, 2000);
-  pinMode(main_motor_pin, OUTPUT);
+  mainMotorSetup();
   Serial.println("Setup complete.");
+}
+
+void mainMotorSetup(){
+  mainMotor.attach(8);
+  pinMode(main_motor_pin, OUTPUT);
+  Serial.println("Main Motor setup complete.");
 }
 
 void radioSetup(){
@@ -41,7 +48,6 @@ void loop() {
 void receiveFlightParams(){
   if(radio.available()){
     radio.read(&dataArray, sizeof(dataArray));
-    Serial.println(String(dataArray[0]) + "-" + String(dataArray[1]) + "-" + String(dataArray[2]));
   }
 }
 
@@ -50,5 +56,15 @@ void transmitVoltage(){
 }
 
 void updateMainMotorParams(){
-  mainMotor.write(map(dataArray[0], 0, 1023, 0, 180));
+  if(dataArray[2] == 0 && changeFlag){
+    motorRunStatus *= -1;
+    changeFlag = false;
+  }else if(dataArray[2] == 1){
+    changeFlag = true;
+  }
+  if(motorRunStatus == 1){
+    mainMotor.write(map(dataArray[0], 0, 1023, 90, 150));
+  }else{
+    mainMotor.write(0);
+  }
 }
