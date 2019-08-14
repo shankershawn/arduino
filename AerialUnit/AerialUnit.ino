@@ -6,6 +6,9 @@
 const int csn_pin = 9;
 const int ce_pin = 10;
 const int main_motor_pin = 8;
+const int cell1_pin = A1;
+const int cell2_pin = A2;
+const int cell3_pin = A3;
 
 // SCK = 13
 // MOSI = 11
@@ -63,7 +66,7 @@ void updateMainMotorParams(){
     changeFlag = true;
   }
   if(motorRunStatus == 1){
-    mainMotor.write(map(dataArray[0], 0, 1023, 90, 150));
+    mainMotor.write(map(dataArray[0], 0, 1023, 100, 180));
   }else{
     mainMotor.write(0);
   }

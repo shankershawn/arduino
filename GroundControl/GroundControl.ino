@@ -11,6 +11,7 @@ int joystick_y_val = 0;
 const int joystick_switch_pin = 8;
 int joystick_switch_val = 0;
 int dataArray[3];
+int joystick_x_old_val = 0;
 
 // SCK = 13
 // MOSI = 11
@@ -23,6 +24,7 @@ void setup() {
   Serial.begin(9600);
   pinMode(joystick_switch_pin, INPUT);
   digitalWrite(joystick_switch_pin, HIGH);
+  dataArray[0] = dataArray[1] = dataArray[2] = 0;
   radioSetup();
   Serial.println("Setup complete.");
 }
@@ -36,7 +38,18 @@ void radioSetup(){
 }
 
 void loop() {
-  dataArray[0] = analogRead(joystick_x_pin);
+  if(dataArray[0] > 0){
+    joystick_x_val = analogRead(joystick_x_pin);
+    if(joystick_x_val > joystick_x_old_val){
+      joystick_x_old_val ++;
+    }else if(joystick_x_val < joystick_x_old_val){
+      joystick_x_old_val --;
+    }
+    dataArray[0] = joystick_x_old_val;
+  }else{
+    dataArray[0] = analogRead(joystick_x_pin);
+    joystick_x_old_val = 0;
+  }
   dataArray[1] = analogRead(joystick_y_pin);
   dataArray[2] = digitalRead(joystick_switch_pin);
   transmitFlightParams();
@@ -44,9 +57,9 @@ void loop() {
 }
 
 void transmitFlightParams(){
-  Serial.println(String(dataArray[0]) + "-" + String(dataArray[1]) + "-" + String(dataArray[2]));
+  Serial.println(String(joystick_x_val) + "-" + String(dataArray[0]) + "-" + String(dataArray[1]) + "-" + String(dataArray[2]));
   radio.write(&dataArray, sizeof(dataArray));
-  delay(10);
+  delay(5);
 }
 
 void receiveVoltage(){
