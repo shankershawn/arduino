@@ -41,9 +41,9 @@ void loop() {
   if(dataArray[0] > 0){
     joystick_x_val = analogRead(joystick_x_pin);
     if(joystick_x_val > joystick_x_old_val){
-      joystick_x_old_val ++;
+      joystick_x_old_val += 5;
     }else if(joystick_x_val < joystick_x_old_val){
-      joystick_x_old_val --;
+      joystick_x_old_val -= 5;
     }
     dataArray[0] = joystick_x_old_val;
   }else{
