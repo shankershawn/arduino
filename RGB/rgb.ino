@@ -33,13 +33,6 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   if(runStatus == 1){
-    /*rgbLed(255,0,0);
-    delay(100);
-    rgbLed(0, 255, 0);
-    delay(100);
-    rgbLed(0, 0, 255);
-    delay(100);*/
-
     if(redIncFlag){
       red_val += random(1,3);
     }else{
