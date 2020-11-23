@@ -41,22 +41,31 @@ void loop() {
     delay(100);*/
 
     if(redIncFlag){
-      red_val += 2;
+      red_val += random(1,3);
     }else{
-      red_val -= 1;
+      red_val -= random(1,3);
     }
 
     if(greenIncFlag){
-      green_val += 3;
+      green_val += random(3,5);
     }else{
-      green_val -= 2;
+      green_val -= random(3,5);
     }
 
     if(blueIncFlag){
-      blue_val += 4;
+      blue_val += random(4,6);
     }else{
-      blue_val -= 3;
+      blue_val -= random(4,6);
     }
+
+    //reduce white light duration
+    if(!((float)red_val / (float)green_val >= 0.5 && (float)red_val / (float)green_val <= 1.5 && (float)blue_val / (float)green_val >= 0.5 && (float)blue_val / (float)green_val <= 1.5)){
+      delay(70);
+    }else{
+      Serial.println("Encountering white");
+    }
+
+    //delay(30);
     
     if(red_val >= 255){
       red_val = 255;
